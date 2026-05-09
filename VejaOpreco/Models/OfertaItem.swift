@@ -15,3 +15,4 @@ struct OfertaItem: Codable, Identifiable {
     let validade: String
     let imagem: URL
 }
+
