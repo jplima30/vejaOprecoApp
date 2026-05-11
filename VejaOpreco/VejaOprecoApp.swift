@@ -11,7 +11,7 @@ import SwiftUI
 struct VejaOprecoApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ListaOfertasView()
         }
     }
 }
