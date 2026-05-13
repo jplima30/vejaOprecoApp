@@ -13,6 +13,6 @@ struct OfertaItem: Codable, Identifiable {
     let preco: Double
     let unidade: String
     let validade: String
-    let imagem: URL
+    let imagemURL: URL?
 }
 

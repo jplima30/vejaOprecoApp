@@ -10,21 +10,33 @@ import SwiftUI
 struct ListaOfertasView: View {
     @StateObject var viewModel = OfertasViewModel()
     var body: some View {
-        List(viewModel.ofertas) { oferta in
-            VStack(alignment: .leading) {
-                Text(oferta.produto).font(.headline)
-                Text("R$\(oferta.preco)").foregroundStyle(.green)
+        NavigationStack {
+            List(viewModel.ofertas) { oferta in
+                HStack (alignment: .center) {
+                    AsyncImage(url: oferta.imagemURL) { imagem in
+                        imagem
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                    }
+                    placeholder: {
+                        ProgressView()
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text(oferta.produto).font(.headline)
+                        Text("R$\(oferta.preco)").foregroundStyle(.green)
+                    }
+                }
             }
-            
-        }
+            .navigationTitle("Ofertas do Dia")
             .onAppear {
                 viewModel.carregarOfertas()
             }
-        
+            
+        }
     }
 }
-
- #Preview {
+#Preview {
     ListaOfertasView()
 }
 
