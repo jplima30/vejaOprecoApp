@@ -17,7 +17,7 @@ struct FirebaseService: OfertaServiceProtocol {
     let db = Firestore.firestore()
     
     func buscarProdutos() async throws -> [OfertaItem] {
-        return []
+        db.collection("buscarSaber").getDocuments()
     }
     
 }
