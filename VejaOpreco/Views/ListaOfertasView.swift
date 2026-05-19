@@ -13,13 +13,20 @@ struct ListaOfertasView: View {
         NavigationStack {
             List(viewModel.ofertas) { oferta in
                 HStack (alignment: .center) {
-                    AsyncImage(url: oferta.imagemURL) { imagem in
-                        imagem
+                    if let urlSegura = oferta.imagemURL {
+                        AsyncImage(url: urlSegura) { imagem in
+                            imagem
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                        }
+                        placeholder: {
+                            ProgressView()
+                        }
+                    } else {
+                        Image(systemName: "photo")
                             .resizable()
-                            .frame(width: 60, height: 60)
-                    }
-                    placeholder: {
-                        ProgressView()
+                            .frame( width: 60, height: 60)
+                            .foregroundStyle(.gray)
                     }
                     
                     VStack(alignment: .leading) {
