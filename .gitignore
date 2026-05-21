@@ -35,3 +35,9 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Local Demonstration Media
+App.mp4
+
+# Antigravity Local Agents Workflows
+.agents/
