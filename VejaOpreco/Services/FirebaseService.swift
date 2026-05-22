@@ -17,7 +17,10 @@ struct FirebaseService: OfertaServiceProtocol {
     let db = Firestore.firestore()
     
     func buscarProdutos() async throws -> [OfertaItem] {
-        try await db.collection("ofertas").getDocuments()
+        let snapshot = try await db.collection("ofertas").getDocuments()
+        return try snapshot.documents.compactMap { documento in
+            try documento.data(as: OfertaItem.self)
+        }
     }
     
 }
