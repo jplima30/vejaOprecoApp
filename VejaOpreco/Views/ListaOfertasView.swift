@@ -46,5 +46,3 @@ struct ListaOfertasView: View {
 #Preview {
     ListaOfertasView()
 }
-
-
