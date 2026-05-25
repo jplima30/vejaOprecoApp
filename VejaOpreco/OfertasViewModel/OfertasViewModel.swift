@@ -8,17 +8,22 @@
 import Foundation
 import Combine
 
+@MainActor
 class OfertasViewModel : ObservableObject {
     
     @Published var ofertas: [OfertaItem] = []
     
-    private let servico = MockService()
+    private let servico = FirebaseService()
     
     
     func carregarOfertas() {
-        
-       ofertas = servico.buscarOfertasDeTeste()
-        
+        Task {
+            do {
+                ofertas = try await servico.buscarProdutos()
+                
+            } catch {
+                print("Erro ao buscar s ofertas: \(error)")
+            }
+        }
     }
-    
 }
