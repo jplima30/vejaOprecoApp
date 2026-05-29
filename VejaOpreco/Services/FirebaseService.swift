@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Firebase
+import FirebaseFirestore
 
 protocol OfertaServiceProtocol {
     func buscarProdutos() async throws -> [OfertaItem]
@@ -18,9 +18,8 @@ struct FirebaseService: OfertaServiceProtocol {
     
     func buscarProdutos() async throws -> [OfertaItem] {
         let snapshot = try await db.collection("ofertas").getDocuments()
-        return try snapshot.documents.compactMap { documento in
-            try documento.data(as: OfertaItem.self)
+        return snapshot.documents.compactMap { documento in
+            try? documento.data(as: OfertaItem.self)
         }
     }
-    
 }
