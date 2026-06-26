@@ -41,3 +41,6 @@ App.mp4
 
 # Antigravity Local Agents Workflows
 .agents/
+
+# Firebase configuration
+VejaOpreco/GoogleService-Info.plist
