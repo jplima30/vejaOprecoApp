@@ -9,6 +9,7 @@ O aplicativo foi construído para conectar usuários às ofertas do banco de dad
 ## 📱 Demonstração da Tela
 
 ![Tela do Aplicativo](App.mp4.png)
+
 *(A demonstração em vídeo pode ser vista localmente através do arquivo `App.mp4` que acompanha o projeto).*
 
 ## Principais Funcionalidades:
