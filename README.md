@@ -1,5 +1,5 @@
-🛒 Veja O Preço
-O **Veja O Preço** é um aplicativo iOS focado na experiência do usuário para consulta ágil de ofertas e controle de produtos. Desenvolvido com foco em alta performance e integração com o ecossistema Firebase (Firestore).
+🛒 **Veja O Preço**
+é um aplicativo iOS focado na experiência do usuário para consulta ágil de ofertas e controle de produtos. Desenvolvido com foco em alta performance e integração com o ecossistema Firebase (Firestore).
 
 Este repositório não é apenas uma entrega técnica; é o reflexo do meu compromisso com a clareza, organização arquitetural e qualidade em cada linha de código, demonstrando o uso avançado de concorrência moderna (`async/await`) nativa do Swift.
 
