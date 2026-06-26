@@ -14,35 +14,48 @@ struct ListaOfertasView: View {
             List(viewModel.ofertas) { oferta in
                 HStack (alignment: .center) {
                     if let urlSegura = oferta.imagemURL {
-                        AsyncImage(url: urlSegura) { imagem in
-                            imagem
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                        }
-                        placeholder: {
-                            ProgressView()
+                        AsyncImage(url: urlSegura) { phase in
+                            switch phase {
+                            case .empty:
+                                // O que mostrar enquanto carrega (ex: o indicador de progresso)
+                                ProgressView()
+                                    .frame(width: 60, height: 60)
+                            case .success(let imagem):
+                                // O que mostrar quando o download der certo
+                                imagem
+                                    .resizable()
+                                    .scaledToFill() // Mantém a proporção da imagem preenchendo o espaço
+                                    .frame(width: 60, height: 60)
+                                    .cornerRadius(8) // Deixa as bordas arredondadas (toque de design!)
+                            case .failure(_):
+                                // O que mostrar caso o download falhe (ex: link quebrado ou sem internet)
+                                Image(systemName: "photo")
+                                    .resizable()
+                                    .frame(width: 60, height: 60)
+                                    .foregroundStyle(.gray)
+                            @unknown default:
+                                EmptyView()
+                            }
                         }
                     } else {
                         Image(systemName: "photo")
                             .resizable()
-                            .frame( width: 60, height: 60)
+                            .frame(width: 60, height: 60)
                             .foregroundStyle(.gray)
                     }
-                    
-                    VStack(alignment: .leading) {
-                        Text(oferta.produto).font(.headline)
-                        Text("R$\(oferta.preco)").foregroundStyle(.green)
+                        VStack(alignment: .leading) {
+                            Text(oferta.produto).font(.headline)
+                            Text(oferta.preco, format: .currency(code: "BRL")).foregroundStyle(.green)
+                        }
                     }
                 }
+                .navigationTitle("Ofertas do Dia")
+                .onAppear {
+                    viewModel.carregarOfertas()
+                }
             }
-            .navigationTitle("Ofertas do Dia")
-            .onAppear {
-                viewModel.carregarOfertas()
-            }
-            
         }
     }
-}
-#Preview {
-    ListaOfertasView()
-}
+    #Preview {
+        ListaOfertasView()
+    }
