@@ -27,5 +27,17 @@ enum CodingKeys: String, CodingKey {
     case imagemURL = "imagem_url"
     
 }
+    
+    enum Categoria: String, Codable, CaseIterable {
+        case alimentos = "ALIMENTOS"
+        case bebidas = "BEBIDAS"
+        case carnes = "CARNES"
+        case hortfruti = "HORTFRUTI"
+        case limpeza = "LIMPEZA"
+        case higiene = "HIGIENE"
+        case infantil = "INFANTIL"
+        case pet = "PET"
+        case outros = "OUTROS"
+    }
 
 }

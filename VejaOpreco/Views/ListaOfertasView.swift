@@ -17,18 +17,15 @@ struct ListaOfertasView: View {
                         AsyncImage(url: urlSegura) { phase in
                             switch phase {
                             case .empty:
-                                // O que mostrar enquanto carrega (ex: o indicador de progresso)
                                 ProgressView()
                                     .frame(width: 60, height: 60)
                             case .success(let imagem):
-                                // O que mostrar quando o download der certo
                                 imagem
                                     .resizable()
-                                    .scaledToFill() // Mantém a proporção da imagem preenchendo o espaço
+                                    .scaledToFill() 
                                     .frame(width: 60, height: 60)
-                                    .cornerRadius(8) // Deixa as bordas arredondadas (toque de design!)
+                                    .cornerRadius(8)
                             case .failure(_):
-                                // O que mostrar caso o download falhe (ex: link quebrado ou sem internet)
                                 Image(systemName: "photo")
                                     .resizable()
                                     .frame(width: 60, height: 60)
