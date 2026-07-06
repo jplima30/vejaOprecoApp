@@ -38,6 +38,7 @@ fastlane/test_output
 
 # Local Demonstration Media
 App.mp4
+App.png
 
 # Antigravity Local Agents Workflows
 .agents/
