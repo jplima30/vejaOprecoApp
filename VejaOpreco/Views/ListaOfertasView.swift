@@ -23,21 +23,46 @@ struct ListaOfertasView: View {
                         )
                     )
                 
-                // 2. Lista de Ofertas Filtradas ou Estado Vazio
+                // 2. Seletor de Supermercados e Validade das Ofertas
+                if !viewModel.supermercadosDisponiveis.isEmpty {
+                    SupermercadosCarrosselView(
+                        supermercados: viewModel.supermercadosDisponiveis,
+                        supermercadoSelecionadoId: $viewModel.supermercadoSelecionadoId
+                    )
+                    .background(Color(.systemGray6).opacity(0.55))
+                    
+                    Divider()
+                }
+                
+                // 3. Lista de Ofertas Filtradas ou Estado Vazio
                 if viewModel.ofertasFiltradas.isEmpty {
                     ContentUnavailableView {
                         Label(
-                            "Nenhuma oferta em \(viewModel.categoriaSelecionada.nomeExibicao)",
+                            "Nenhuma oferta encontrada",
                             systemImage: viewModel.categoriaSelecionada.nomeIcone
                         )
                     } description: {
-                        Text("Não encontramos promoções ativas para esta categoria hoje. Experimente selecionar outra categoria acima.")
-                    } actions: {
-                        Button("Recarregar Ofertas") {
-                            viewModel.carregarOfertas()
+                        if viewModel.supermercadoSelecionadoId != nil {
+                            Text("Não encontramos promoções ativas para o supermercado selecionado na categoria \(viewModel.categoriaSelecionada.nomeExibicao).")
+                        } else {
+                            Text("Não encontramos promoções ativas para esta categoria hoje. Experimente selecionar outra categoria acima.")
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(.orange)
+                    } actions: {
+                        if viewModel.supermercadoSelecionadoId != nil {
+                            Button("Ver Todas as Lojas") {
+                                withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                                    viewModel.supermercadoSelecionadoId = nil
+                                }
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(.orange)
+                        } else {
+                            Button("Recarregar Ofertas") {
+                                viewModel.carregarOfertas()
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(.orange)
+                        }
                     }
                     .frame(maxHeight: .infinity)
                 } else {
