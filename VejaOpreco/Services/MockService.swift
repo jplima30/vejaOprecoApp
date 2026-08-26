@@ -11,8 +11,8 @@ class MockService {
 
     func buscarOfertasDeTeste() -> [OfertaItem]  {
         return [
-            OfertaItem(id: "1", produto: "Arroz", categoria: "Mercearia", preco: 5.99, unidade: "1kg", validade: "10/10/2026", imagemURL: URL(string: "https://exemplo.com/arroz.png")!),
-            OfertaItem(id: "2", produto: "Feijão", categoria: "Mercearia", preco: 8.99, unidade: "1kg", validade: "10/10/2026", imagemURL: nil)
+            OfertaItem(id: "1", produto: "Arroz", categoria: .alimentos, preco: 5.99, unidade: "1kg", validade: "10/10/2026", imagemURL: URL(string: "https://exemplo.com/arroz.png")!, loja: "Supermercado Líder", supermercadoId: "lider-am"),
+            OfertaItem(id: "2", produto: "Feijão", categoria: .alimentos, preco: 8.99, unidade: "1kg", validade: "10/10/2026", imagemURL: nil, loja: "Assaí Atacadista", supermercadoId: "assai-am")
         ]
     }
     
