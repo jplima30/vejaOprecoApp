@@ -13,6 +13,7 @@ O aplicativo foi construído para conectar usuários às ofertas do banco de dad
 
 ## Principais Funcionalidades:
 
-- **Exploração de Catálogo:** Uma lista completa e organizada de produtos com preço, validade e categorias.
+- **Carrossel Interativo de Categorias:** Navegação dinâmica por categorias com micro-animações elásticas nativas (`matchedGeometryEffect`) e filtragem reativa instantânea de ofertas.
+- **Exploração de Catálogo:** Lista organizada de produtos com preço, unidade, validade e identificação visual do supermercado.
 - **Imersão Técnica:** Uso de `async/await` para consultas ultrarrápidas na internet, sem bloquear a interface gráfica.
 - **Experiência Conectada:** Integração direta com Firestore, utilizando `compactMap` e protocolos `Codable` para garantir que as informações estejam sempre seguras e formatadas corretamente.
