@@ -12,12 +12,12 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto com Etiquetas Abraçando as Bordas
-            ZStack(alignment: .top) {
+            // 1. Imagem do Produto com Etiquetas Abraçando as Bordas (Vertical na esquerda e Validade embaixo)
+            ZStack {
                 // Fundo neutro suave da foto
                 Color(.systemGray6).opacity(0.35)
                 
-                // Imagem
+                // Imagem do Produto
                 if let urlSegura = oferta.imagemURL {
                     AsyncImage(url: urlSegura) { phase in
                         switch phase {
@@ -29,7 +29,7 @@ struct OfertaCardView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 145)
-                                .padding(6)
+                                .padding(8)
                         case .failure(_):
                             Image(systemName: "photo")
                                 .resizable()
@@ -50,75 +50,69 @@ struct OfertaCardView: View {
                         .frame(height: 145)
                 }
                 
-                // Camada de Etiquetas Integradas
-                VStack(alignment: .leading, spacing: 8) {
-                    // 1. Etiqueta de Validade (Abraçada no topo/centro)
-                    if let validade = oferta.validade, !validade.isEmpty {
-                        HStack {
-                            Spacer()
-                            
-                            HStack(spacing: 4) {
-                                Image(systemName: "clock.fill")
-                                    .font(.system(size: 8))
-                                Text(validade)
-                                    .font(.system(size: 9, weight: .bold))
-                            }
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 9)
-                            .padding(.vertical, 3.5)
-                            .background(Color.black.opacity(0.65))
-                            .clipShape(
-                                UnevenRoundedRectangle(
-                                    topLeadingRadius: 0,
-                                    bottomLeadingRadius: 7,
-                                    bottomTrailingRadius: 7,
-                                    topTrailingRadius: 0
-                                )
-                            )
-                            .shadow(color: .black.opacity(0.12), radius: 2, y: 1)
-                            
-                            Spacer()
-                        }
-                    } else {
-                        // Espaço reservado para simetria
-                        Color.clear.frame(height: 16)
-                    }
-                    
-                    // 2. Etiqueta da Loja (Abraçada na lateral esquerda deitada na horizontal)
-                    HStack(spacing: 0) {
-                        HStack(spacing: 5) {
-                            // Círculo com a sigla corporativa da loja
-                            Text(oferta.temaSupermercado.sigla)
-                                .font(.system(size: 8, weight: .black))
-                                .foregroundStyle(oferta.temaSupermercado.fundo)
-                                .frame(width: 17, height: 17)
-                                .background(Color.white)
-                                .clipShape(Circle())
-                            
-                            // Nome completo da loja na horizontal
-                            Text(oferta.nomeSupermercadoExibicao)
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundStyle(oferta.temaSupermercado.texto)
-                                .lineLimit(1)
-                        }
-                        .padding(.leading, 8)
-                        .padding(.trailing, 10)
-                        .padding(.vertical, 4)
-                        .background(oferta.temaSupermercado.fundo)
-                        .clipShape(
-                            UnevenRoundedRectangle(
-                                topLeadingRadius: 0,
-                                bottomLeadingRadius: 0,
-                                bottomTrailingRadius: 9,
-                                topTrailingRadius: 9
-                            )
-                        )
-                        .shadow(color: .black.opacity(0.12), radius: 3, x: 1, y: 1)
+                // Etiqueta da Loja na Vertical (Alinhada à borda vertical da esquerda)
+                HStack {
+                    HStack(spacing: 5) {
+                        // Círculo com a sigla corporativa da loja
+                        Text(oferta.temaSupermercado.sigla)
+                            .font(.system(size: 8, weight: .black))
+                            .foregroundStyle(oferta.temaSupermercado.fundo)
+                            .frame(width: 16, height: 16)
+                            .background(Color.white)
+                            .clipShape(Circle())
+                            .rotationEffect(.degrees(90))
                         
-                        Spacer()
+                        // Nome da loja
+                        Text(oferta.nomeSupermercadoExibicao)
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundStyle(oferta.temaSupermercado.texto)
+                            .lineLimit(1)
                     }
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 3.5)
+                    .background(oferta.temaSupermercado.fundo)
+                    .clipShape(
+                        UnevenRoundedRectangle(
+                            topLeadingRadius: 0,
+                            bottomLeadingRadius: 7,
+                            bottomTrailingRadius: 7,
+                            topTrailingRadius: 0
+                        )
+                    )
+                    .shadow(color: .black.opacity(0.12), radius: 2, y: 1)
+                    .fixedSize()
+                    .rotationEffect(.degrees(-90))
+                    .frame(width: 24)
+                    .padding(.leading, 2)
                     
                     Spacer()
+                }
+                
+                // Etiqueta de Validade (Abraçada na borda de baixo da foto centralizada)
+                if let validade = oferta.validade, !validade.isEmpty {
+                    VStack {
+                        Spacer()
+                        
+                        HStack(spacing: 4) {
+                            Image(systemName: "clock.fill")
+                                .font(.system(size: 8))
+                            Text(validade)
+                                .font(.system(size: 9, weight: .bold))
+                        }
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 9)
+                        .padding(.vertical, 3.5)
+                        .background(Color.black.opacity(0.65))
+                        .clipShape(
+                            UnevenRoundedRectangle(
+                                topLeadingRadius: 7,
+                                bottomLeadingRadius: 0,
+                                bottomTrailingRadius: 0,
+                                topTrailingRadius: 7
+                            )
+                        )
+                        .shadow(color: .black.opacity(0.12), radius: 2, y: -1)
+                    }
                 }
             }
             .frame(maxWidth: .infinity)
