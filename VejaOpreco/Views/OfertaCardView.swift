@@ -12,7 +12,7 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto com Pílulas Flutuantes nos Cantos
+            // 1. Imagem do Produto com Etiquetas Abraçando as Bordas
             ZStack(alignment: .top) {
                 // Fundo neutro suave da foto
                 Color(.systemGray6).opacity(0.35)
@@ -29,7 +29,7 @@ struct OfertaCardView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 145)
-                                .padding(4)
+                                .padding(6)
                         case .failure(_):
                             Image(systemName: "photo")
                                 .resizable()
@@ -50,49 +50,76 @@ struct OfertaCardView: View {
                         .frame(height: 145)
                 }
                 
-                // Pílulas nos Cantos Superiores
-                HStack(alignment: .top) {
-                    // Pílula da Loja (Canto Superior Esquerdo)
-                    HStack(spacing: 5) {
-                        // Círculo com a sigla corporativa da loja
-                        Text(oferta.temaSupermercado.sigla)
-                            .font(.system(size: 8, weight: .black))
-                            .foregroundStyle(oferta.temaSupermercado.fundo)
-                            .frame(width: 17, height: 17)
-                            .background(Color.white)
-                            .clipShape(Circle())
-                        
-                        Text(oferta.nomeSupermercadoExibicao)
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(oferta.temaSupermercado.texto)
-                            .lineLimit(1)
+                // Camada de Etiquetas Integradas
+                VStack(alignment: .leading, spacing: 8) {
+                    // 1. Etiqueta de Validade (Abraçada no topo/centro)
+                    if let validade = oferta.validade, !validade.isEmpty {
+                        HStack {
+                            Spacer()
+                            
+                            HStack(spacing: 4) {
+                                Image(systemName: "clock.fill")
+                                    .font(.system(size: 8))
+                                Text(validade)
+                                    .font(.system(size: 9, weight: .bold))
+                            }
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 3.5)
+                            .background(Color.black.opacity(0.65))
+                            .clipShape(
+                                UnevenRoundedRectangle(
+                                    topLeadingRadius: 0,
+                                    bottomLeadingRadius: 7,
+                                    bottomTrailingRadius: 7,
+                                    topTrailingRadius: 0
+                                )
+                            )
+                            .shadow(color: .black.opacity(0.12), radius: 2, y: 1)
+                            
+                            Spacer()
+                        }
+                    } else {
+                        // Espaço reservado para simetria
+                        Color.clear.frame(height: 16)
                     }
-                    .padding(.leading, 3)
-                    .padding(.trailing, 7)
-                    .padding(.vertical, 3)
-                    .background(oferta.temaSupermercado.fundo)
-                    .clipShape(Capsule())
-                    .shadow(color: .black.opacity(0.15), radius: 3, y: 1)
+                    
+                    // 2. Etiqueta da Loja (Abraçada na lateral esquerda deitada na horizontal)
+                    HStack(spacing: 0) {
+                        HStack(spacing: 5) {
+                            // Círculo com a sigla corporativa da loja
+                            Text(oferta.temaSupermercado.sigla)
+                                .font(.system(size: 8, weight: .black))
+                                .foregroundStyle(oferta.temaSupermercado.fundo)
+                                .frame(width: 17, height: 17)
+                                .background(Color.white)
+                                .clipShape(Circle())
+                            
+                            // Nome completo da loja na horizontal
+                            Text(oferta.nomeSupermercadoExibicao)
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundStyle(oferta.temaSupermercado.texto)
+                                .lineLimit(1)
+                        }
+                        .padding(.leading, 8)
+                        .padding(.trailing, 10)
+                        .padding(.vertical, 4)
+                        .background(oferta.temaSupermercado.fundo)
+                        .clipShape(
+                            UnevenRoundedRectangle(
+                                topLeadingRadius: 0,
+                                bottomLeadingRadius: 0,
+                                bottomTrailingRadius: 9,
+                                topTrailingRadius: 9
+                            )
+                        )
+                        .shadow(color: .black.opacity(0.12), radius: 3, x: 1, y: 1)
+                        
+                        Spacer()
+                    }
                     
                     Spacer()
-                    
-                    // Pílula de Validade (Canto Superior Direito)
-                    if let validade = oferta.validade, !validade.isEmpty {
-                        HStack(spacing: 3) {
-                            Image(systemName: "clock")
-                                .font(.system(size: 8, weight: .bold))
-                            Text(validade)
-                                .font(.system(size: 9, weight: .semibold))
-                        }
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 3)
-                        .background(Color.black.opacity(0.55))
-                        .clipShape(Capsule())
-                        .shadow(color: .black.opacity(0.15), radius: 3, y: 1)
-                    }
                 }
-                .padding(8)
             }
             .frame(maxWidth: .infinity)
             .frame(height: 145)
@@ -148,7 +175,7 @@ struct OfertaCardView: View {
                     unidade: "un",
                     validade: "13 a 15 Abr",
                     imagemURL: nil,
-                    loja: "Assaí",
+                    loja: "Assaí Atacadista",
                     supermercadoId: "assai"
                 )
             )
@@ -163,7 +190,7 @@ struct OfertaCardView: View {
                     unidade: "kg",
                     validade: "12 a 18 Abr",
                     imagemURL: nil,
-                    loja: "Líder",
+                    loja: "Supermercado Líder",
                     supermercadoId: "lider"
                 )
             )
