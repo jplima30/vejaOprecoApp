@@ -12,7 +12,7 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto com Etiquetas Abraçando as Bordas (Vertical na esquerda e Validade embaixo)
+            // 1. Imagem do Produto com Etiquetas Abraçando as Bordas
             ZStack {
                 // Fundo neutro suave da foto
                 Color(.systemGray6).opacity(0.35)
@@ -50,45 +50,47 @@ struct OfertaCardView: View {
                         .frame(height: 145)
                 }
                 
-                // Etiqueta da Loja na Vertical (Alinhada à borda vertical da esquerda)
-                HStack {
-                    HStack(spacing: 5) {
-                        // Círculo com a sigla corporativa da loja
-                        Text(oferta.temaSupermercado.sigla)
-                            .font(.system(size: 8, weight: .black))
-                            .foregroundStyle(oferta.temaSupermercado.fundo)
-                            .frame(width: 16, height: 16)
-                            .background(Color.white)
-                            .clipShape(Circle())
-                            .rotationEffect(.degrees(90))
-                        
-                        // Nome da loja
-                        Text(oferta.nomeSupermercadoExibicao)
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundStyle(oferta.temaSupermercado.texto)
-                            .lineLimit(1)
-                    }
-                    .padding(.horizontal, 7)
-                    .padding(.vertical, 3.5)
-                    .background(oferta.temaSupermercado.fundo)
-                    .clipShape(
-                        UnevenRoundedRectangle(
-                            topLeadingRadius: 0,
-                            bottomLeadingRadius: 7,
-                            bottomTrailingRadius: 7,
-                            topTrailingRadius: 0
+                // Etiqueta do Supermercado (Centralizada verticalmente na vitrine, abraçando a lateral esquerda)
+                VStack {
+                    Spacer()
+                    
+                    HStack(spacing: 0) {
+                        HStack(spacing: 5) {
+                            // Círculo com a sigla corporativa da loja
+                            Text(oferta.temaSupermercado.sigla)
+                                .font(.system(size: 8, weight: .black))
+                                .foregroundStyle(oferta.temaSupermercado.fundo)
+                                .frame(width: 17, height: 17)
+                                .background(Color.white)
+                                .clipShape(Circle())
+                            
+                            // Nome completo da loja
+                            Text(oferta.nomeSupermercadoExibicao)
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundStyle(oferta.temaSupermercado.texto)
+                                .lineLimit(1)
+                        }
+                        .padding(.leading, 8)
+                        .padding(.trailing, 10)
+                        .padding(.vertical, 4)
+                        .background(oferta.temaSupermercado.fundo)
+                        .clipShape(
+                            UnevenRoundedRectangle(
+                                topLeadingRadius: 0,
+                                bottomLeadingRadius: 0,
+                                bottomTrailingRadius: 9,
+                                topTrailingRadius: 9
+                            )
                         )
-                    )
-                    .shadow(color: .black.opacity(0.12), radius: 2, y: 1)
-                    .fixedSize()
-                    .rotationEffect(.degrees(-90))
-                    .frame(width: 24)
-                    .padding(.leading, 2)
+                        .shadow(color: .black.opacity(0.15), radius: 3, x: 1, y: 1)
+                        
+                        Spacer()
+                    }
                     
                     Spacer()
                 }
                 
-                // Etiqueta de Validade (Abraçada na borda de baixo da foto centralizada)
+                // Etiqueta de Validade (Abraçada na borda de baixo da vitrine/foto centralizada)
                 if let validade = oferta.validade, !validade.isEmpty {
                     VStack {
                         Spacer()
