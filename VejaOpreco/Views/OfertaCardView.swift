@@ -73,30 +73,29 @@ struct OfertaCardView: View {
             
             // Supermercado e Validade
             VStack(alignment: .leading, spacing: 3) {
-                if let loja = oferta.loja {
-                    Text(loja)
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(.orange)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(Color.orange.opacity(0.12))
-                        .clipShape(Capsule())
-                        .lineLimit(1)
-                }
-                
-                if let validade = oferta.validade {
-                    HStack(spacing: 3) {
-                        Image(systemName: "clock")
-                            .font(.system(size: 9))
-                        Text(validade)
-                            .font(.system(size: 10))
-                    }
-                    .foregroundStyle(.secondary)
+                Text(oferta.nomeSupermercadoExibicao)
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(.orange)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Color.orange.opacity(0.12))
+                    .clipShape(Capsule())
                     .lineLimit(1)
+                
+                HStack(spacing: 3) {
+                    Image(systemName: "clock")
+                        .font(.system(size: 9))
+                    Text(oferta.validade ?? "Oferta ativa")
+                        .font(.system(size: 10))
                 }
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
             }
+            .frame(height: 38, alignment: .topLeading)
         }
         .padding(10)
+        .frame(maxWidth: .infinity)
+        .frame(height: 255)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(

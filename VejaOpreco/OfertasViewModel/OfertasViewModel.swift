@@ -33,8 +33,8 @@ class OfertasViewModel: ObservableObject {
             guard let supId = oferta.supermercadoId, !supId.isEmpty else { continue }
             
             if mapaMercados[supId] == nil {
-                let nomeLoja = oferta.loja ?? supId.capitalized
-                let validadeTexto = oferta.validade ?? "Oferta do dia"
+                let nomeLoja = oferta.nomeSupermercadoExibicao
+                let validadeTexto = oferta.validade ?? "Oferta ativa"
                 
                 mapaMercados[supId] = SupermercadoFiltro(
                     id: supId,
