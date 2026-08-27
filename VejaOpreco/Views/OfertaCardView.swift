@@ -12,7 +12,7 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto com Etiquetas Abraçando as Bordas
+            // 1. Imagem do Produto com Ribbon Vertical da Loja Centralizado na Borda Esquerda
             ZStack {
                 // Fundo neutro suave da foto
                 Color(.systemGray6).opacity(0.35)
@@ -50,71 +50,48 @@ struct OfertaCardView: View {
                         .frame(height: 145)
                 }
                 
-                // Etiqueta do Supermercado (Centralizada verticalmente na vitrine, abraçando a lateral esquerda)
-                VStack {
-                    Spacer()
-                    
-                    HStack(spacing: 0) {
+                // Ribbon Vertical da Loja (Do jeito anterior, centralizado verticalmente na borda esquerda)
+                HStack {
+                    VStack {
+                        Spacer()
+                        
                         HStack(spacing: 5) {
                             // Círculo com a sigla corporativa da loja
                             Text(oferta.temaSupermercado.sigla)
                                 .font(.system(size: 8, weight: .black))
                                 .foregroundStyle(oferta.temaSupermercado.fundo)
-                                .frame(width: 17, height: 17)
+                                .frame(width: 16, height: 16)
                                 .background(Color.white)
                                 .clipShape(Circle())
+                                .rotationEffect(.degrees(90))
                             
-                            // Nome completo da loja
+                            // Nome da loja na vertical
                             Text(oferta.nomeSupermercadoExibicao)
-                                .font(.system(size: 10, weight: .bold))
+                                .font(.system(size: 9, weight: .bold))
                                 .foregroundStyle(oferta.temaSupermercado.texto)
                                 .lineLimit(1)
                         }
-                        .padding(.leading, 8)
-                        .padding(.trailing, 10)
-                        .padding(.vertical, 4)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 3.5)
                         .background(oferta.temaSupermercado.fundo)
                         .clipShape(
                             UnevenRoundedRectangle(
                                 topLeadingRadius: 0,
-                                bottomLeadingRadius: 0,
-                                bottomTrailingRadius: 9,
-                                topTrailingRadius: 9
+                                bottomLeadingRadius: 7,
+                                bottomTrailingRadius: 7,
+                                topTrailingRadius: 0
                             )
                         )
-                        .shadow(color: .black.opacity(0.15), radius: 3, x: 1, y: 1)
+                        .shadow(color: .black.opacity(0.12), radius: 2, y: 1)
+                        .fixedSize()
+                        .rotationEffect(.degrees(-90))
+                        .frame(width: 24)
+                        .padding(.leading, 2)
                         
                         Spacer()
                     }
                     
                     Spacer()
-                }
-                
-                // Etiqueta de Validade (Abraçada na borda de baixo da vitrine/foto centralizada)
-                if let validade = oferta.validade, !validade.isEmpty {
-                    VStack {
-                        Spacer()
-                        
-                        HStack(spacing: 4) {
-                            Image(systemName: "clock.fill")
-                                .font(.system(size: 8))
-                            Text(validade)
-                                .font(.system(size: 9, weight: .bold))
-                        }
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 3.5)
-                        .background(Color.black.opacity(0.65))
-                        .clipShape(
-                            UnevenRoundedRectangle(
-                                topLeadingRadius: 7,
-                                bottomLeadingRadius: 0,
-                                bottomTrailingRadius: 0,
-                                topTrailingRadius: 7
-                            )
-                        )
-                        .shadow(color: .black.opacity(0.12), radius: 2, y: -1)
-                    }
                 }
             }
             .frame(maxWidth: .infinity)
@@ -143,10 +120,43 @@ struct OfertaCardView: View {
             }
             .padding(.horizontal, 10)
             .padding(.top, 10)
-            .padding(.bottom, 12)
+            .padding(.bottom, 6)
+            
+            Spacer(minLength: 0)
+            
+            // 3. Etiqueta de Validade no Rodapé da Vitrine (Abraçada na borda inferior do card, centralizada)
+            if let validade = oferta.validade, !validade.isEmpty {
+                HStack {
+                    Spacer()
+                    
+                    HStack(spacing: 4) {
+                        Image(systemName: "clock.fill")
+                            .font(.system(size: 8))
+                        Text(validade)
+                            .font(.system(size: 9, weight: .bold))
+                    }
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 3.5)
+                    .background(Color.black.opacity(0.68))
+                    .clipShape(
+                        UnevenRoundedRectangle(
+                            topLeadingRadius: 7,
+                            bottomLeadingRadius: 0,
+                            bottomTrailingRadius: 0,
+                            topTrailingRadius: 7
+                        )
+                    )
+                    .shadow(color: .black.opacity(0.12), radius: 2, y: -1)
+                    
+                    Spacer()
+                }
+            } else {
+                Color.clear.frame(height: 16)
+            }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 250)
+        .frame(height: 265)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(
