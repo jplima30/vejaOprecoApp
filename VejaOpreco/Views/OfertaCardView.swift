@@ -12,21 +12,23 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto (Sangria total no topo e laterais)
-            ZStack {
+            // 1. Imagem do Produto com Pílulas Flutuantes nos Cantos
+            ZStack(alignment: .top) {
+                // Fundo neutro suave da foto
                 Color(.systemGray6).opacity(0.35)
                 
+                // Imagem
                 if let urlSegura = oferta.imagemURL {
                     AsyncImage(url: urlSegura) { phase in
                         switch phase {
                         case .empty:
                             ProgressView()
-                                .frame(height: 135)
+                                .frame(height: 145)
                         case .success(let imagem):
                             imagem
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 135)
+                                .frame(height: 145)
                                 .padding(4)
                         case .failure(_):
                             Image(systemName: "photo")
@@ -34,7 +36,7 @@ struct OfertaCardView: View {
                                 .scaledToFit()
                                 .frame(width: 40, height: 40)
                                 .foregroundStyle(.gray.opacity(0.45))
-                                .frame(height: 135)
+                                .frame(height: 145)
                         @unknown default:
                             EmptyView()
                         }
@@ -45,77 +47,88 @@ struct OfertaCardView: View {
                         .scaledToFit()
                         .frame(width: 40, height: 40)
                         .foregroundStyle(.gray.opacity(0.45))
-                        .frame(height: 135)
+                        .frame(height: 145)
                 }
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 135)
-            
-            // 2. Informações da Oferta (Hierarquia visual com apelo promocional)
-            VStack(alignment: .leading, spacing: 5) {
-                // Pílula Personalizada com cores da Loja + Validade
-                HStack(spacing: 4) {
-                    Image(systemName: "storefront.fill")
-                        .font(.system(size: 9))
+                
+                // Pílulas nos Cantos Superiores
+                HStack(alignment: .top) {
+                    // Pílula da Loja (Canto Superior Esquerdo)
+                    HStack(spacing: 5) {
+                        // Círculo com a sigla corporativa da loja
+                        Text(oferta.temaSupermercado.sigla)
+                            .font(.system(size: 8, weight: .black))
+                            .foregroundStyle(oferta.temaSupermercado.fundo)
+                            .frame(width: 17, height: 17)
+                            .background(Color.white)
+                            .clipShape(Circle())
+                        
+                        Text(oferta.nomeSupermercadoExibicao)
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundStyle(oferta.temaSupermercado.texto)
+                            .lineLimit(1)
+                    }
+                    .padding(.leading, 3)
+                    .padding(.trailing, 7)
+                    .padding(.vertical, 3)
+                    .background(oferta.temaSupermercado.fundo)
+                    .clipShape(Capsule())
+                    .shadow(color: .black.opacity(0.15), radius: 3, y: 1)
                     
-                    Text(oferta.nomeSupermercadoExibicao)
-                        .font(.system(size: 10, weight: .bold))
+                    Spacer()
                     
-                    if let validade = oferta.validade {
-                        Text("• \(validade)")
-                            .font(.system(size: 9, weight: .medium))
+                    // Pílula de Validade (Canto Superior Direito)
+                    if let validade = oferta.validade, !validade.isEmpty {
+                        HStack(spacing: 3) {
+                            Image(systemName: "clock")
+                                .font(.system(size: 8, weight: .bold))
+                            Text(validade)
+                                .font(.system(size: 9, weight: .semibold))
+                        }
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 3)
+                        .background(Color.black.opacity(0.55))
+                        .clipShape(Capsule())
+                        .shadow(color: .black.opacity(0.15), radius: 3, y: 1)
                     }
                 }
-                .foregroundStyle(oferta.temaSupermercado.texto)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 3)
-                .background(oferta.temaSupermercado.fundo)
-                .clipShape(Capsule())
-                .lineLimit(1)
-                
-                // Preço Anterior Riscado ("De: R$ X,XX")
-                HStack(spacing: 4) {
-                    Text("De:")
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundStyle(.secondary)
-                    
-                    Text(oferta.precoAnteriorExibicao, format: .currency(code: "BRL"))
-                        .font(.system(size: 11, weight: .semibold))
-                        .strikethrough(color: .secondary.opacity(0.8))
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.top, 1)
-                
-                // Preço de Oferta em Destaque Verde + Unidade
+                .padding(8)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 145)
+            
+            // 2. Informações da Oferta (Preço real + Nome do produto)
+            VStack(alignment: .leading, spacing: 6) {
+                // Preço de Oferta em Verde Vibrante + Unidade
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Text(oferta.preco, format: .currency(code: "BRL"))
-                        .font(.system(size: 17, weight: .heavy))
+                        .font(.system(size: 18, weight: .heavy))
                         .foregroundStyle(Color.green)
                     
                     Text("/ \(oferta.unidade)")
-                        .font(.system(size: 11, weight: .medium))
+                        .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(.secondary)
                 }
                 
-                // Nome do Produto (Altura fixa de 34pt para simetria em 2 linhas)
+                // Nome do Produto (Altura padronizada para simetria na grade)
                 Text(oferta.produto)
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(.primary)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
-                    .frame(height: 34, alignment: .topLeading)
+                    .frame(height: 36, alignment: .topLeading)
             }
             .padding(.horizontal, 10)
-            .padding(.top, 8)
-            .padding(.bottom, 10)
+            .padding(.top, 10)
+            .padding(.bottom, 12)
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 295)
+        .frame(height: 250)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(
             RoundedRectangle(cornerRadius: 14)
-                .stroke(Color(.systemGray5), lineWidth: 1)
+                .stroke(oferta.temaSupermercado.fundo.opacity(0.35), lineWidth: 1.5)
         )
         .shadow(color: Color.black.opacity(0.04), radius: 5, x: 0, y: 2)
     }
@@ -132,7 +145,6 @@ struct OfertaCardView: View {
                     produto: "Leite Condensado Piracanjuba Semidesnatado 395g",
                     categoria: .alimentos,
                     preco: 4.89,
-                    precoOriginal: 5.99,
                     unidade: "un",
                     validade: "13 a 15 Abr",
                     imagemURL: nil,
@@ -140,7 +152,7 @@ struct OfertaCardView: View {
                     supermercadoId: "assai"
                 )
             )
-            .frame(width: 170)
+            .frame(width: 175)
             
             OfertaCardView(
                 oferta: OfertaItem(
@@ -148,7 +160,6 @@ struct OfertaCardView: View {
                     produto: "Alcatra Bovina com Maminha",
                     categoria: .carnes,
                     preco: 36.90,
-                    precoOriginal: 44.90,
                     unidade: "kg",
                     validade: "12 a 18 Abr",
                     imagemURL: nil,
@@ -156,7 +167,7 @@ struct OfertaCardView: View {
                     supermercadoId: "lider"
                 )
             )
-            .frame(width: 170)
+            .frame(width: 175)
         }
         .padding()
     }

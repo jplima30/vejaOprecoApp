@@ -7,7 +7,6 @@ struct OfertaItem: Codable, Identifiable {
     let produto: String
     let categoria: Categoria
     let preco: Double
-    let precoOriginal: Double?
     let unidade: String
     let validade: String?
     let imagemURL: URL?
@@ -19,7 +18,6 @@ struct OfertaItem: Codable, Identifiable {
         case produto = "produto_nome"
         case categoria
         case preco
-        case precoOriginal = "preco_original"
         case unidade
         case validade
         case imagemURL = "imagem_url"
@@ -32,7 +30,6 @@ struct OfertaItem: Codable, Identifiable {
         produto: String,
         categoria: Categoria,
         preco: Double,
-        precoOriginal: Double? = nil,
         unidade: String,
         validade: String? = nil,
         imagemURL: URL? = nil,
@@ -43,7 +40,6 @@ struct OfertaItem: Codable, Identifiable {
         self.produto = produto
         self.categoria = categoria
         self.preco = preco
-        self.precoOriginal = precoOriginal
         self.unidade = unidade
         self.validade = validade
         self.imagemURL = imagemURL
@@ -100,35 +96,26 @@ extension OfertaItem {
         }
     }
     
-    var precoAnteriorExibicao: Double {
-        if let original = precoOriginal, original > preco {
-            return original
-        }
-        // Valor de referência de economia para destacar a promoção (calculado a ~22% acima)
-        return (preco * 1.22 * 100).rounded() / 100
-    }
-    
-    var temaSupermercado: (fundo: Color, texto: Color) {
+    var temaSupermercado: (fundo: Color, texto: Color, sigla: String) {
         switch supermercadoId?.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) ?? "" {
         case "assai":
-            // Azul Royal Assaí com texto branco
-            return (Color(red: 0.05, green: 0.28, blue: 0.63), .white)
+            // Azul Royal Assaí com texto branco e sigla AS
+            return (Color(red: 0.05, green: 0.28, blue: 0.63), .white, "AS")
         case "lider":
-            // Vermelho Líder com texto branco
-            return (Color(red: 0.85, green: 0.12, blue: 0.15), .white)
+            // Vermelho Líder com texto branco e sigla LD
+            return (Color(red: 0.85, green: 0.12, blue: 0.15), .white, "LD")
         case "formosa":
-            // Verde Formosa com texto branco
-            return (Color(red: 0.08, green: 0.52, blue: 0.25), .white)
+            // Verde Formosa com texto branco e sigla FM
+            return (Color(red: 0.08, green: 0.52, blue: 0.25), .white, "FM")
         case "mateus", "mix_mateus", "mixmateus":
-            // Amarelo Ouro Mix Mateus com texto escuro
-            return (Color(red: 0.98, green: 0.72, blue: 0.08), Color(red: 0.15, green: 0.15, blue: 0.15))
+            // Amarelo Ouro Mix Mateus com texto escuro e sigla MM
+            return (Color(red: 0.98, green: 0.72, blue: 0.08), Color(red: 0.15, green: 0.15, blue: 0.15), "MM")
         case "nazare":
-            // Verde Nazaré com texto branco
-            return (Color(red: 0.10, green: 0.45, blue: 0.30), .white)
+            // Verde Nazaré com texto branco e sigla NZ
+            return (Color(red: 0.10, green: 0.45, blue: 0.30), .white, "NZ")
         default:
-            // Laranja com texto branco padrão
-            return (Color.orange, .white)
+            let prefixo = String(nomeSupermercadoExibicao.prefix(2)).uppercased()
+            return (Color.orange, .white, prefixo.isEmpty ? "VP" : prefixo)
         }
     }
 }
-
