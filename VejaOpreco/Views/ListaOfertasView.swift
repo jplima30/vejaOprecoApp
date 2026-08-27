@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ListaOfertasView: View {
     @StateObject var viewModel = OfertasViewModel()
+    @State private var ofertaSelecionada: OfertaItem? = nil
     
     // Configuração da Grade em 2 Colunas Flexíveis
     private let colunasGrid = [
@@ -75,7 +76,12 @@ struct ListaOfertasView: View {
                     ScrollView {
                         LazyVGrid(columns: colunasGrid, spacing: 12) {
                             ForEach(viewModel.ofertasFiltradas) { oferta in
-                                OfertaCardView(oferta: oferta)
+                                Button {
+                                    ofertaSelecionada = oferta
+                                } label: {
+                                    OfertaCardView(oferta: oferta)
+                                }
+                                .buttonStyle(.plain)
                             }
                         }
                         .padding(.horizontal, 16)
@@ -90,6 +96,9 @@ struct ListaOfertasView: View {
             }
             .navigationTitle("Veja O Preço")
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(item: $ofertaSelecionada) { oferta in
+                OfertaDetalheView(oferta: oferta)
+            }
             .onAppear {
                 if viewModel.ofertas.isEmpty {
                     viewModel.carregarOfertas()
