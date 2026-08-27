@@ -12,12 +12,12 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto com Ribbon Vertical da Loja Centralizado na Borda Esquerda
+            // 1. Imagem do Produto em Sangria Total com Ribbon Sobreposto
             ZStack {
                 // Fundo neutro suave da foto
                 Color(.systemGray6).opacity(0.35)
                 
-                // Imagem do Produto
+                // Imagem do Produto (Ocupa 100% da largura, passando livremente por baixo do Ribbon)
                 if let urlSegura = oferta.imagemURL {
                     AsyncImage(url: urlSegura) { phase in
                         switch phase {
@@ -28,8 +28,9 @@ struct OfertaCardView: View {
                             imagem
                                 .resizable()
                                 .scaledToFit()
+                                .frame(maxWidth: .infinity)
                                 .frame(height: 145)
-                                .padding(8)
+                                .padding(.vertical, 4)
                         case .failure(_):
                             Image(systemName: "photo")
                                 .resizable()
@@ -50,7 +51,7 @@ struct OfertaCardView: View {
                         .frame(height: 145)
                 }
                 
-                // Ribbon Vertical da Loja (Do jeito anterior, centralizado verticalmente na borda esquerda)
+                // Ribbon Vertical da Loja (Centralizado na borda esquerda com sutil translucidez para ver a foto passando por baixo)
                 HStack {
                     VStack {
                         Spacer()
@@ -73,7 +74,7 @@ struct OfertaCardView: View {
                         }
                         .padding(.horizontal, 7)
                         .padding(.vertical, 3.5)
-                        .background(oferta.temaSupermercado.fundo)
+                        .background(oferta.temaSupermercado.fundo.opacity(0.90))
                         .clipShape(
                             UnevenRoundedRectangle(
                                 topLeadingRadius: 0,
@@ -82,7 +83,7 @@ struct OfertaCardView: View {
                                 topTrailingRadius: 0
                             )
                         )
-                        .shadow(color: .black.opacity(0.12), radius: 2, y: 1)
+                        .shadow(color: .black.opacity(0.14), radius: 3, x: 1, y: 1)
                         .fixedSize()
                         .rotationEffect(.degrees(-90))
                         .frame(width: 24)
