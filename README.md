@@ -15,6 +15,6 @@ O aplicativo foi construído para conectar usuários às ofertas do banco de dad
 
 - **Carrossel Interativo de Categorias:** Navegação dinâmica por categorias com micro-animações elásticas nativas (`matchedGeometryEffect`) e filtragem reativa instantânea de ofertas.
 - **Validade das Ofertas & Filtro por Supermercado:** Seletor horizontal com cards de lojas parceiras, exibindo o período de vigência das promoções e permitindo filtragem combinada instantânea por loja e categoria.
-- **Exploração de Catálogo:** Lista organizada de produtos com preço, unidade, validade e identificação visual do supermercado.
+- **Vitrine em Grid de 2 Colunas:** Exibição em grade moderna (`LazyVGrid`) com cards verticais de produtos (`OfertaCardView`), carregamento assíncrono de fotos, preço em destaque verde, unidade e badge da loja parceira.
 - **Imersão Técnica:** Uso de `async/await` para consultas ultrarrápidas na internet, sem bloquear a interface gráfica.
 - **Experiência Conectada:** Integração direta com Firestore, utilizando `compactMap` e protocolos `Codable` para garantir que as informações estejam sempre seguras e formatadas corretamente.

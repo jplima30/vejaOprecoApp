@@ -10,6 +10,12 @@ import SwiftUI
 struct ListaOfertasView: View {
     @StateObject var viewModel = OfertasViewModel()
     
+    // Configuração da Grade em 2 Colunas Flexíveis
+    private let colunasGrid = [
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12)
+    ]
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -34,7 +40,7 @@ struct ListaOfertasView: View {
                     Divider()
                 }
                 
-                // 3. Lista de Ofertas Filtradas ou Estado Vazio
+                // 3. Vitrine de Ofertas em Grid de 2 Colunas ou Estado Vazio
                 if viewModel.ofertasFiltradas.isEmpty {
                     ContentUnavailableView {
                         Label(
@@ -66,83 +72,17 @@ struct ListaOfertasView: View {
                     }
                     .frame(maxHeight: .infinity)
                 } else {
-                    List(viewModel.ofertasFiltradas) { oferta in
-                        HStack(spacing: 12) {
-                            // Imagem do Produto
-                            if let urlSegura = oferta.imagemURL {
-                                AsyncImage(url: urlSegura) { phase in
-                                    switch phase {
-                                    case .empty:
-                                        ProgressView()
-                                            .frame(width: 70, height: 70)
-                                    case .success(let imagem):
-                                        imagem
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 70, height: 70)
-                                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                                    case .failure(_):
-                                        Image(systemName: "photo")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 40, height: 40)
-                                            .frame(width: 70, height: 70)
-                                            .foregroundStyle(.gray.opacity(0.6))
-                                            .background(Color(.systemGray6))
-                                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                                    @unknown default:
-                                        EmptyView()
-                                    }
-                                }
-                            } else {
-                                Image(systemName: "photo")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 40, height: 40)
-                                    .frame(width: 70, height: 70)
-                                    .foregroundStyle(.gray.opacity(0.6))
-                                    .background(Color(.systemGray6))
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                            }
-                            
-                            // Informações da Oferta
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(oferta.produto)
-                                    .font(.headline)
-                                    .lineLimit(2)
-                                
-                                HStack(spacing: 6) {
-                                    Text(oferta.preco, format: .currency(code: "BRL"))
-                                        .font(.title3.bold())
-                                        .foregroundStyle(.green)
-                                    
-                                    Text("/ \(oferta.unidade)")
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
-                                }
-                                
-                                HStack(spacing: 8) {
-                                    if let loja = oferta.loja {
-                                        Text(loja)
-                                            .font(.caption.bold())
-                                            .foregroundStyle(.orange)
-                                            .padding(.horizontal, 8)
-                                            .padding(.vertical, 2)
-                                            .background(Color.orange.opacity(0.12))
-                                            .clipShape(Capsule())
-                                    }
-                                    
-                                    if let validade = oferta.validade {
-                                        Text(validade)
-                                            .font(.caption2)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                }
+                    ScrollView {
+                        LazyVGrid(columns: colunasGrid, spacing: 12) {
+                            ForEach(viewModel.ofertasFiltradas) { oferta in
+                                OfertaCardView(oferta: oferta)
                             }
                         }
-                        .padding(.vertical, 4)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 12)
+                        .padding(.bottom, 24)
                     }
-                    .listStyle(.plain)
+                    .background(Color(.systemGray6).opacity(0.4))
                     .refreshable {
                         viewModel.carregarOfertas()
                     }
