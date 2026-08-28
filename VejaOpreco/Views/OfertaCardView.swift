@@ -12,13 +12,13 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto Expandida (210pt) com Corner Radius Harmonioso
+            // 1. Imagem do Produto Expandida com Corte Arredondado Real
             ZStack {
                 // Fundo neutro suave da foto
                 RoundedRectangle(cornerRadius: 14)
                     .fill(Color(.systemGray6).opacity(0.4))
                 
-                // Imagem do Produto (Amplitude máxima mantendo proporção e cantos arredondados)
+                // Imagem do Produto (Preenchimento total com cantos 100% arredondados cortando o JPEG)
                 if let urlSegura = oferta.imagemURL {
                     AsyncImage(url: urlSegura) { phase in
                         switch phase {
@@ -28,9 +28,10 @@ struct OfertaCardView: View {
                         case .success(let imagem):
                             imagem
                                 .resizable()
-                                .scaledToFit()
+                                .scaledToFill()
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .clipped()
+                                .clipShape(RoundedRectangle(cornerRadius: 14))
                         case .failure(_):
                             Image(systemName: "photo")
                                 .resizable()

@@ -33,10 +33,11 @@ struct OfertaDetalheView: View {
                                 case .success(let imagem):
                                     imagem
                                         .resizable()
-                                        .scaledToFit()
+                                        .scaledToFill()
                                         .frame(maxWidth: .infinity)
-                                        .frame(height: 280)
-                                        .padding(10)
+                                        .frame(height: 300)
+                                        .clipped()
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
                                 case .failure(_):
                                     VStack(spacing: 8) {
                                         Image(systemName: "photo")
