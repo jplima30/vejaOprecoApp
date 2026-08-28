@@ -12,12 +12,12 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto em Formato Quadrado (175x175) com Sangria Total
+            // 1. Imagem do Produto Expandida para Baixo (195pt) com Ribbon Sobreposto
             ZStack {
                 // Fundo neutro suave da foto
                 Color(.systemGray6).opacity(0.35)
                 
-                // Imagem do Produto (Expande-se em proporção 1:1 até as bordas)
+                // Imagem do Produto (Ocupa mais espaço para baixo, centralizada e imponente)
                 if let urlSegura = oferta.imagemURL {
                     AsyncImage(url: urlSegura) { phase in
                         switch phase {
@@ -29,7 +29,7 @@ struct OfertaCardView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .padding(4)
+                                .padding(6)
                         case .failure(_):
                             Image(systemName: "photo")
                                 .resizable()
@@ -95,10 +95,10 @@ struct OfertaCardView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 175)
+            .frame(height: 195)
             
-            // 2. Informações da Oferta (Preço real + Nome do produto)
-            VStack(alignment: .leading, spacing: 6) {
+            // 2. Informações da Oferta (Preço e Descrição compactos na base)
+            VStack(alignment: .leading, spacing: 4) {
                 // Preço de Oferta em Verde Vibrante + Unidade
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Text(oferta.preco, format: .currency(code: "BRL"))
@@ -110,21 +110,21 @@ struct OfertaCardView: View {
                         .foregroundStyle(.secondary)
                 }
                 
-                // Nome do Produto (Altura padronizada para simetria na grade)
+                // Nome do Produto (Compacto e posicionado embaixo)
                 Text(oferta.produto)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(.primary)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
-                    .frame(height: 36, alignment: .topLeading)
+                    .frame(height: 32, alignment: .topLeading)
             }
             .padding(.horizontal, 10)
-            .padding(.top, 10)
-            .padding(.bottom, 6)
+            .padding(.top, 8)
+            .padding(.bottom, 2)
             
             Spacer(minLength: 0)
             
-            // 3. Etiqueta de Validade no Rodapé da Vitrine (Abraçada na borda inferior do card, centralizada)
+            // 3. Etiqueta de Validade no Rodapé da Vitrine (Abraçada na borda inferior do card, centralizada sem vão)
             if let validade = oferta.validade, !validade.isEmpty {
                 HStack {
                     Spacer()
