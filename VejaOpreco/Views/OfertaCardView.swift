@@ -12,13 +12,12 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto com Moldura e Cantos Arredondados
+            // 1. Imagem do Produto em Amplitude Máxima 1:1 (Sangria Total no Topo e Laterais)
             ZStack {
-                // Fundo neutro suave da foto com cantos arredondados
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemGray6).opacity(0.45))
+                // Fundo neutro suave da foto
+                Color(.systemGray6).opacity(0.35)
                 
-                // Imagem do Produto (Mantém proporção sem vazar da grade e com cantos curvos no JPEG)
+                // Imagem do Produto (Ocupa 100% da largura útil sem cortes e sem margens internas)
                 if let urlSegura = oferta.imagemURL {
                     AsyncImage(url: urlSegura) { phase in
                         switch phase {
@@ -29,8 +28,6 @@ struct OfertaCardView: View {
                             imagem
                                 .resizable()
                                 .scaledToFit()
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                .padding(6)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                         case .failure(_):
                             Image(systemName: "photo")
@@ -97,13 +94,10 @@ struct OfertaCardView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 180)
-            .clipped()
-            .padding(.horizontal, 6)
-            .padding(.top, 6)
+            .frame(height: 175)
             
-            // 2. Informações da Oferta (Preço e Descrição compactos na base)
-            VStack(alignment: .leading, spacing: 4) {
+            // 2. Informações da Oferta (Preço e Descrição compactos e posicionados no fim da vitrine)
+            VStack(alignment: .leading, spacing: 3) {
                 // Preço de Oferta em Verde Vibrante + Unidade
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Text(oferta.preco, format: .currency(code: "BRL"))
@@ -115,7 +109,7 @@ struct OfertaCardView: View {
                         .foregroundStyle(.secondary)
                 }
                 
-                // Nome do Produto (Compacto e posicionado embaixo)
+                // Nome do Produto (Compacto, alinhado à base)
                 Text(oferta.produto)
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(.primary)
@@ -124,12 +118,12 @@ struct OfertaCardView: View {
                     .frame(height: 32, alignment: .topLeading)
             }
             .padding(.horizontal, 10)
-            .padding(.top, 8)
+            .padding(.top, 6)
             .padding(.bottom, 2)
             
             Spacer(minLength: 0)
             
-            // 3. Etiqueta de Validade no Rodapé da Vitrine (Abraçada na borda inferior do card, centralizada sem vão)
+            // 3. Etiqueta de Validade no Rodapé da Vitrine (Abraçada na borda inferior do card, centralizada)
             if let validade = oferta.validade, !validade.isEmpty {
                 HStack {
                     Spacer()
@@ -142,7 +136,7 @@ struct OfertaCardView: View {
                     }
                     .foregroundStyle(.white)
                     .padding(.horizontal, 10)
-                    .padding(.vertical, 3.5)
+                    .padding(.vertical, 3)
                     .background(Color.black.opacity(0.68))
                     .clipShape(
                         UnevenRoundedRectangle(
@@ -157,11 +151,11 @@ struct OfertaCardView: View {
                     Spacer()
                 }
             } else {
-                Color.clear.frame(height: 16)
+                Color.clear.frame(height: 14)
             }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 285)
+        .frame(height: 265)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(
