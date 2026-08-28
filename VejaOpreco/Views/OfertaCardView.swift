@@ -12,32 +12,31 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto em Sangria Total com Ribbon Sobreposto
+            // 1. Imagem do Produto em Formato Quadrado (175x175) com Sangria Total
             ZStack {
                 // Fundo neutro suave da foto
                 Color(.systemGray6).opacity(0.35)
                 
-                // Imagem do Produto (Ocupa 100% da largura, passando livremente por baixo do Ribbon)
+                // Imagem do Produto (Expande-se em proporção 1:1 até as bordas)
                 if let urlSegura = oferta.imagemURL {
                     AsyncImage(url: urlSegura) { phase in
                         switch phase {
                         case .empty:
                             ProgressView()
-                                .frame(height: 145)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                         case .success(let imagem):
                             imagem
                                 .resizable()
                                 .scaledToFit()
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 145)
-                                .padding(.vertical, 4)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .padding(4)
                         case .failure(_):
                             Image(systemName: "photo")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 40, height: 40)
                                 .foregroundStyle(.gray.opacity(0.45))
-                                .frame(height: 145)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                         @unknown default:
                             EmptyView()
                         }
@@ -48,10 +47,10 @@ struct OfertaCardView: View {
                         .scaledToFit()
                         .frame(width: 40, height: 40)
                         .foregroundStyle(.gray.opacity(0.45))
-                        .frame(height: 145)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 
-                // Ribbon Vertical da Loja (Centralizado na borda esquerda com sutil translucidez para ver a foto passando por baixo)
+                // Ribbon Vertical da Loja (Centralizado na borda esquerda com sutil translucidez)
                 HStack {
                     VStack {
                         Spacer()
@@ -96,7 +95,7 @@ struct OfertaCardView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 145)
+            .frame(height: 175)
             
             // 2. Informações da Oferta (Preço real + Nome do produto)
             VStack(alignment: .leading, spacing: 6) {
@@ -157,7 +156,7 @@ struct OfertaCardView: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 265)
+        .frame(height: 295)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(
