@@ -12,13 +12,13 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto Expandida com Corte Arredondado Real
+            // 1. Imagem do Produto com Moldura e Cantos Arredondados
             ZStack {
-                // Fundo neutro suave da foto
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(Color(.systemGray6).opacity(0.4))
+                // Fundo neutro suave da foto com cantos arredondados
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(.systemGray6).opacity(0.45))
                 
-                // Imagem do Produto (Preenchimento total com cantos 100% arredondados cortando o JPEG)
+                // Imagem do Produto (Mantém proporção sem vazar da grade e com cantos curvos no JPEG)
                 if let urlSegura = oferta.imagemURL {
                     AsyncImage(url: urlSegura) { phase in
                         switch phase {
@@ -28,10 +28,10 @@ struct OfertaCardView: View {
                         case .success(let imagem):
                             imagem
                                 .resizable()
-                                .scaledToFill()
+                                .scaledToFit()
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .padding(6)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .clipped()
-                                .clipShape(RoundedRectangle(cornerRadius: 14))
                         case .failure(_):
                             Image(systemName: "photo")
                                 .resizable()
@@ -97,15 +97,17 @@ struct OfertaCardView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 210)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .frame(height: 180)
+            .clipped()
+            .padding(.horizontal, 6)
+            .padding(.top, 6)
             
             // 2. Informações da Oferta (Preço e Descrição compactos na base)
             VStack(alignment: .leading, spacing: 4) {
                 // Preço de Oferta em Verde Vibrante + Unidade
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Text(oferta.preco, format: .currency(code: "BRL"))
-                        .font(.system(size: 19, weight: .heavy))
+                        .font(.system(size: 18, weight: .heavy))
                         .foregroundStyle(Color.green)
                     
                     Text("/ \(oferta.unidade)")
@@ -159,11 +161,11 @@ struct OfertaCardView: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 310)
+        .frame(height: 285)
         .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 14)
                 .stroke(oferta.temaSupermercado.fundo.opacity(0.35), lineWidth: 1.5)
         )
         .shadow(color: Color.black.opacity(0.04), radius: 5, x: 0, y: 2)
