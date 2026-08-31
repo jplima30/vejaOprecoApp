@@ -159,6 +159,20 @@ struct OfertaDetalheView: View {
                             Text(oferta.categoria.nomeExibicao)
                                 .fontWeight(.semibold)
                         }
+                        
+                        // ID do Produto (Canônico do Catálogo)
+                        if let prodId = oferta.produtoId ?? oferta.id, !prodId.isEmpty {
+                            HStack {
+                                Label("Produto ID", systemImage: "tag")
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                Text(prodId)
+                                    .font(.system(size: 13, weight: .medium, design: .monospaced))
+                                    .foregroundStyle(.primary)
+                                    .lineLimit(1)
+                                    .truncationMode(.middle)
+                            }
+                        }
                     }
                     .font(.subheadline)
                     .padding()
@@ -204,6 +218,7 @@ struct OfertaDetalheView: View {
     OfertaDetalheView(
         oferta: OfertaItem(
             id: "1",
+            produtoId: "leite-condensado-piracanjuba-395g",
             produto: "Leite Condensado Piracanjuba Semidesnatado 395g",
             categoria: .alimentos,
             preco: 4.89,
