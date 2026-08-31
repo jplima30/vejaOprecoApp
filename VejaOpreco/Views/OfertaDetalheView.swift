@@ -161,15 +161,17 @@ struct OfertaDetalheView: View {
                                 .fontWeight(.semibold)
                         }
                         
-                        // ID do Produto (Canônico do Catálogo) com botão de cópia rápida
+                        // ID do Produto (Canônico do Catálogo) com botão de cópia e ShareLink
                         if let prodId = oferta.produtoId ?? oferta.id, !prodId.isEmpty {
-                            HStack {
+                            HStack(spacing: 8) {
                                 Label("Produto ID", systemImage: "tag")
                                     .foregroundStyle(.secondary)
                                 Spacer()
+                                
                                 Button {
                                     UIPasteboard.general.string = prodId
                                     UIPasteboard.general.setValue(prodId, forPasteboardType: "public.plain-text")
+                                    print("📋 [PRODUTO ID COPIADO]: \(prodId)")
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
                                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
@@ -200,13 +202,17 @@ struct OfertaDetalheView: View {
                                     .contentShape(Rectangle())
                                 }
                                 .buttonStyle(.plain)
-                                .contextMenu {
-                                    Button {
-                                        UIPasteboard.general.string = prodId
-                                    } label: {
-                                        Label("Copiar ID do Produto", systemImage: "doc.on.doc")
-                                    }
+                                
+                                // Botão de Compartilhar Nativo do iOS
+                                ShareLink(item: prodId) {
+                                    Image(systemName: "square.and.arrow.up")
+                                        .font(.system(size: 13, weight: .semibold))
+                                        .foregroundStyle(.secondary)
+                                        .padding(6)
+                                        .background(Color(.systemGray5).opacity(0.8))
+                                        .clipShape(Circle())
                                 }
+                                .buttonStyle(.plain)
                             }
                         }
                     }
