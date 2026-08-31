@@ -10,6 +10,7 @@ import SwiftUI
 struct OfertaDetalheView: View {
     let oferta: OfertaItem
     @Environment(\.dismiss) private var dismiss
+    @State private var idCopiado: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -160,17 +161,42 @@ struct OfertaDetalheView: View {
                                 .fontWeight(.semibold)
                         }
                         
-                        // ID do Produto (Canônico do Catálogo)
+                        // ID do Produto (Canônico do Catálogo) com botão de cópia rápida
                         if let prodId = oferta.produtoId ?? oferta.id, !prodId.isEmpty {
                             HStack {
                                 Label("Produto ID", systemImage: "tag")
                                     .foregroundStyle(.secondary)
                                 Spacer()
-                                Text(prodId)
-                                    .font(.system(size: 13, weight: .medium, design: .monospaced))
-                                    .foregroundStyle(.primary)
-                                    .lineLimit(1)
-                                    .truncationMode(.middle)
+                                Button {
+                                    UIPasteboard.general.string = prodId
+                                    let generator = UINotificationFeedbackGenerator()
+                                    generator.notificationOccurred(.success)
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        idCopiado = true
+                                    }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                        withAnimation {
+                                            idCopiado = false
+                                        }
+                                    }
+                                } label: {
+                                    HStack(spacing: 6) {
+                                        Text(prodId)
+                                            .font(.system(size: 12, weight: .medium, design: .monospaced))
+                                            .foregroundStyle(idCopiado ? Color.green : Color.primary)
+                                            .lineLimit(1)
+                                            .truncationMode(.middle)
+                                        
+                                        Image(systemName: idCopiado ? "checkmark.circle.fill" : "doc.on.doc")
+                                            .font(.system(size: 13, weight: .semibold))
+                                            .foregroundStyle(idCopiado ? Color.green : Color.accentColor)
+                                    }
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(idCopiado ? Color.green.opacity(0.12) : Color(.systemGray5).opacity(0.6))
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+                                .buttonStyle(.plain)
                             }
                         }
                     }
