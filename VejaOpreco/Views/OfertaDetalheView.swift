@@ -169,6 +169,7 @@ struct OfertaDetalheView: View {
                                 Spacer()
                                 Button {
                                     UIPasteboard.general.string = prodId
+                                    UIPasteboard.general.setValue(prodId, forPasteboardType: "public.plain-text")
                                     let generator = UINotificationFeedbackGenerator()
                                     generator.notificationOccurred(.success)
                                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
@@ -186,17 +187,26 @@ struct OfertaDetalheView: View {
                                             .foregroundStyle(idCopiado ? Color.green : Color.primary)
                                             .lineLimit(1)
                                             .truncationMode(.middle)
+                                            .textSelection(.enabled)
                                         
                                         Image(systemName: idCopiado ? "checkmark.circle.fill" : "doc.on.doc")
                                             .font(.system(size: 13, weight: .semibold))
                                             .foregroundStyle(idCopiado ? Color.green : Color.accentColor)
                                     }
                                     .padding(.horizontal, 8)
-                                    .padding(.vertical, 4)
-                                    .background(idCopiado ? Color.green.opacity(0.12) : Color(.systemGray5).opacity(0.6))
+                                    .padding(.vertical, 5)
+                                    .background(idCopiado ? Color.green.opacity(0.15) : Color(.systemGray5).opacity(0.8))
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .contentShape(Rectangle())
                                 }
                                 .buttonStyle(.plain)
+                                .contextMenu {
+                                    Button {
+                                        UIPasteboard.general.string = prodId
+                                    } label: {
+                                        Label("Copiar ID do Produto", systemImage: "doc.on.doc")
+                                    }
+                                }
                             }
                         }
                     }
