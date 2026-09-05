@@ -18,11 +18,12 @@ struct OfertaDetalheView: View {
                 VStack(spacing: 20) {
                     // 1. Container da Foto Expandida
                     ZStack(alignment: .bottomTrailing) {
-                        // Fundo neutro com borda suave
+                        // Fundo branco puro de estúdio com sombra suave
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(Color(.systemGray6).opacity(0.6))
+                            .fill(Color.white)
                             .frame(maxWidth: .infinity)
                             .frame(height: 300)
+                            .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 3)
                         
                         // Imagem do Produto Expandida
                         if let urlSegura = oferta.imagemURL {
@@ -36,7 +37,7 @@ struct OfertaDetalheView: View {
                                         .resizable()
                                         .scaledToFit()
                                         .clipShape(RoundedRectangle(cornerRadius: 16))
-                                        .padding(10)
+                                        .padding(12)
                                         .frame(maxWidth: .infinity)
                                         .frame(height: 300)
                                 case .failure(_):
@@ -69,17 +70,19 @@ struct OfertaDetalheView: View {
                             .frame(height: 300)
                         }
                         
-                        // Badge Técnico de Resolução (Para inspecionar a qualidade real)
-                        HStack(spacing: 4) {
-                            Image(systemName: "camera.viewfinder")
+                        // Badge Técnico de Qualidade e Origem
+                        let isCurada = oferta.imagemURL?.absoluteString.contains("?t=") == true
+                        HStack(spacing: 5) {
+                            Image(systemName: isCurada ? "checkmark.seal.fill" : "camera.viewfinder")
                                 .font(.system(size: 11, weight: .bold))
-                            Text("200 × 200 px (Firebase)")
+                                .foregroundStyle(isCurada ? Color.green : Color.white)
+                            Text(isCurada ? "400 × 400 px (Curadoria HD)" : "Packshot (Firebase)")
                                 .font(.system(size: 11, weight: .semibold))
+                                .foregroundStyle(.white)
                         }
-                        .foregroundStyle(.white)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
-                        .background(Color.black.opacity(0.7))
+                        .background(Color.black.opacity(0.72))
                         .clipShape(Capsule())
                         .padding(12)
                     }

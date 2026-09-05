@@ -14,8 +14,8 @@ struct OfertaCardView: View {
         VStack(alignment: .leading, spacing: 0) {
             // 1. Imagem do Produto em Amplitude Máxima 1:1 (Sangria Total no Topo e Laterais)
             ZStack {
-                // Fundo neutro suave da foto
-                Color(.systemGray6).opacity(0.35)
+                // Fundo branco puro para integração perfeita com packshots curados
+                Color.white
                 
                 // Imagem do Produto (Ocupa 100% da largura útil sem cortes e sem margens internas)
                 if let urlSegura = oferta.imagemURL {
