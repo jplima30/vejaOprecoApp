@@ -57,7 +57,7 @@ struct OfertaItem: Codable, Identifiable {
         case padaria = "PADARIA"
         case friosLaticinios = "FRIOS_LATICINIOS"
         case carnes = "CARNES"
-        case hortifruti = "HORTFRUTI"
+        case hortifruti = "HORTIFRUTI"
         case limpeza = "LIMPEZA"
         case higiene = "HIGIENE"
         case pet = "PET"
@@ -65,8 +65,12 @@ struct OfertaItem: Codable, Identifiable {
         
         init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
-            let rawValue = try container.decode(String.self)
-            self = Categoria(rawValue: rawValue.uppercased()) ?? .alimentos
+            let rawValue = try container.decode(String.self).uppercased()
+            if rawValue == "HORTFRUTI" || rawValue == "HORTIFRUTI" {
+                self = .hortifruti
+            } else {
+                self = Categoria(rawValue: rawValue) ?? .alimentos
+            }
         }
     }
 }
