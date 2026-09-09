@@ -26,5 +26,5 @@ A vitrine do **Veja o Preço** segue um padrão gráfico premium estrito para ga
 - **Resolução & Proporção:** Imagens quadradas de 400 × 400 px (proporção 1:1) com produto centralizado e respiro de 20 px em todas as bordas (área útil de 360 × 360 px);
 - **Fundo Branco Puro:** Periferia e 4 cantos em `#FFFFFF` estrito (RGB: 255, 255, 255), eliminando recortes escuros, artefatos de compressão e fundos coloridos de encartes/tabloides;
 - **Onda 1 (Saneamento de Fundos Pretos/Cinzas):** 34 produtos com fundos pretos opacos e sombras cinzas pesadas saneados com packshots de estúdio;
-- **Onda 2 (Saneamento de Fundos Coloridos de Encarte - Issue #14):** 42 produtos com fundos coloridos de tabloides (azul-petróleo Mateus, faixas verdes e gôndolas) 100% substituídos por packshots comerciais de estúdio em alta resolução com fundo branco puro.
-
+- **Onda 2 (Saneamento de Fundos Coloridos de Encarte - Issue #14):** 42 produtos com fundos coloridos de tabloides (azul-petróleo Mateus, faixas verdes e gôndolas) 100% substituídos por packshots comerciais de estúdio em alta resolução com fundo branco puro;
+- **Onda 3 (Saneamento de Off-White e URLs Quebradas - Issue #15):** 96 produtos com desvios sutis de tom *off-white* ou URLs legadas 100% padronizados com fundo `#FFFFFF` estrito, alcançando **100% de conformidade visual** em toda a vitrine do aplicativo.
