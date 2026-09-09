@@ -4,6 +4,7 @@ import FirebaseFirestore
 
 struct OfertaItem: Codable, Identifiable {
     @DocumentID var id: String?
+    let produtoId: String?
     let produto: String
     let categoria: Categoria
     let preco: Double
@@ -15,6 +16,7 @@ struct OfertaItem: Codable, Identifiable {
     
     enum CodingKeys: String, CodingKey {
         case id
+        case produtoId = "produto_id"
         case produto = "produto_nome"
         case categoria
         case preco
@@ -27,6 +29,7 @@ struct OfertaItem: Codable, Identifiable {
     
     init(
         id: String? = nil,
+        produtoId: String? = nil,
         produto: String,
         categoria: Categoria,
         preco: Double,
@@ -37,6 +40,7 @@ struct OfertaItem: Codable, Identifiable {
         supermercadoId: String? = nil
     ) {
         self.id = id
+        self.produtoId = produtoId
         self.produto = produto
         self.categoria = categoria
         self.preco = preco
@@ -53,7 +57,7 @@ struct OfertaItem: Codable, Identifiable {
         case padaria = "PADARIA"
         case friosLaticinios = "FRIOS_LATICINIOS"
         case carnes = "CARNES"
-        case hortifruti = "HORTFRUTI"
+        case hortifruti = "HORTIFRUTI"
         case limpeza = "LIMPEZA"
         case higiene = "HIGIENE"
         case pet = "PET"
@@ -61,8 +65,12 @@ struct OfertaItem: Codable, Identifiable {
         
         init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
-            let rawValue = try container.decode(String.self)
-            self = Categoria(rawValue: rawValue.uppercased()) ?? .alimentos
+            let rawValue = try container.decode(String.self).uppercased()
+            if rawValue == "HORTFRUTI" || rawValue == "HORTIFRUTI" {
+                self = .hortifruti
+            } else {
+                self = Categoria(rawValue: rawValue) ?? .alimentos
+            }
         }
     }
 }

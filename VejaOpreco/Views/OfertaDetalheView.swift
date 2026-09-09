@@ -10,6 +10,7 @@ import SwiftUI
 struct OfertaDetalheView: View {
     let oferta: OfertaItem
     @Environment(\.dismiss) private var dismiss
+    @State private var idCopiado: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -17,11 +18,12 @@ struct OfertaDetalheView: View {
                 VStack(spacing: 20) {
                     // 1. Container da Foto Expandida
                     ZStack(alignment: .bottomTrailing) {
-                        // Fundo neutro com borda suave
+                        // Fundo branco puro de estúdio com sombra suave
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(Color(.systemGray6).opacity(0.6))
+                            .fill(Color.white)
                             .frame(maxWidth: .infinity)
                             .frame(height: 300)
+                            .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 3)
                         
                         // Imagem do Produto Expandida
                         if let urlSegura = oferta.imagemURL {
@@ -34,9 +36,10 @@ struct OfertaDetalheView: View {
                                     imagem
                                         .resizable()
                                         .scaledToFit()
+                                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                                        .padding(12)
                                         .frame(maxWidth: .infinity)
-                                        .frame(height: 280)
-                                        .padding(10)
+                                        .frame(height: 300)
                                 case .failure(_):
                                     VStack(spacing: 8) {
                                         Image(systemName: "photo")
@@ -67,17 +70,19 @@ struct OfertaDetalheView: View {
                             .frame(height: 300)
                         }
                         
-                        // Badge Técnico de Resolução (Para inspecionar a qualidade real)
-                        HStack(spacing: 4) {
-                            Image(systemName: "camera.viewfinder")
+                        // Badge Técnico de Qualidade e Origem
+                        let isCurada = oferta.imagemURL?.absoluteString.contains("?t=") == true
+                        HStack(spacing: 5) {
+                            Image(systemName: isCurada ? "checkmark.seal.fill" : "camera.viewfinder")
                                 .font(.system(size: 11, weight: .bold))
-                            Text("200 × 200 px (Firebase)")
+                                .foregroundStyle(isCurada ? Color.green : Color.white)
+                            Text(isCurada ? "400 × 400 px (Curadoria HD)" : "Packshot (Firebase)")
                                 .font(.system(size: 11, weight: .semibold))
+                                .foregroundStyle(.white)
                         }
-                        .foregroundStyle(.white)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
-                        .background(Color.black.opacity(0.7))
+                        .background(Color.black.opacity(0.72))
                         .clipShape(Capsule())
                         .padding(12)
                     }
@@ -158,6 +163,67 @@ struct OfertaDetalheView: View {
                             Text(oferta.categoria.nomeExibicao)
                                 .fontWeight(.semibold)
                         }
+                        
+                        // ID do Produto (Canônico do Catálogo) com botão de cópia rápida e ShareLink
+                        if let prodId = oferta.produtoId ?? oferta.id, !prodId.isEmpty {
+                            HStack(spacing: 8) {
+                                Label("Produto ID", systemImage: "tag")
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                
+                                Button {
+                                    UIPasteboard.general.string = prodId
+                                    UIPasteboard.general.setValue(prodId, forPasteboardType: "public.plain-text")
+                                    let generator = UINotificationFeedbackGenerator()
+                                    generator.notificationOccurred(.success)
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                        idCopiado = true
+                                    }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                        withAnimation {
+                                            idCopiado = false
+                                        }
+                                    }
+                                } label: {
+                                    HStack(spacing: 6) {
+                                        Text(prodId)
+                                            .font(.system(size: 12, weight: .medium, design: .monospaced))
+                                            .foregroundStyle(idCopiado ? Color.green : Color.primary)
+                                            .lineLimit(1)
+                                            .truncationMode(.middle)
+                                            .textSelection(.enabled)
+                                        
+                                        Image(systemName: idCopiado ? "checkmark.circle.fill" : "doc.on.doc")
+                                            .font(.system(size: 13, weight: .semibold))
+                                            .foregroundStyle(idCopiado ? Color.green : Color.accentColor)
+                                    }
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 5)
+                                    .background(idCopiado ? Color.green.opacity(0.15) : Color(.systemGray5).opacity(0.8))
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .contextMenu {
+                                    Button {
+                                        UIPasteboard.general.string = prodId
+                                    } label: {
+                                        Label("Copiar ID do Produto", systemImage: "doc.on.doc")
+                                    }
+                                }
+                                
+                                // Botão de Compartilhar Nativo da Apple
+                                ShareLink(item: prodId) {
+                                    Image(systemName: "square.and.arrow.up")
+                                        .font(.system(size: 13, weight: .semibold))
+                                        .foregroundStyle(.secondary)
+                                        .padding(6)
+                                        .background(Color(.systemGray5).opacity(0.8))
+                                        .clipShape(Circle())
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
                     }
                     .font(.subheadline)
                     .padding()
@@ -203,6 +269,7 @@ struct OfertaDetalheView: View {
     OfertaDetalheView(
         oferta: OfertaItem(
             id: "1",
+            produtoId: "leite-condensado-piracanjuba-395g",
             produto: "Leite Condensado Piracanjuba Semidesnatado 395g",
             categoria: .alimentos,
             preco: 4.89,

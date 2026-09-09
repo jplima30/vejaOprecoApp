@@ -12,32 +12,30 @@ struct OfertaCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 1. Imagem do Produto em Sangria Total com Ribbon Sobreposto
+            // 1. Imagem do Produto em Amplitude Máxima 1:1 (Sangria Total no Topo e Laterais)
             ZStack {
-                // Fundo neutro suave da foto
-                Color(.systemGray6).opacity(0.35)
+                // Fundo branco puro para integração perfeita com packshots curados
+                Color.white
                 
-                // Imagem do Produto (Ocupa 100% da largura, passando livremente por baixo do Ribbon)
+                // Imagem do Produto (Ocupa 100% da largura útil sem cortes e sem margens internas)
                 if let urlSegura = oferta.imagemURL {
                     AsyncImage(url: urlSegura) { phase in
                         switch phase {
                         case .empty:
                             ProgressView()
-                                .frame(height: 145)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                         case .success(let imagem):
                             imagem
                                 .resizable()
                                 .scaledToFit()
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 145)
-                                .padding(.vertical, 4)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                         case .failure(_):
                             Image(systemName: "photo")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 40, height: 40)
                                 .foregroundStyle(.gray.opacity(0.45))
-                                .frame(height: 145)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                         @unknown default:
                             EmptyView()
                         }
@@ -48,10 +46,10 @@ struct OfertaCardView: View {
                         .scaledToFit()
                         .frame(width: 40, height: 40)
                         .foregroundStyle(.gray.opacity(0.45))
-                        .frame(height: 145)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 
-                // Ribbon Vertical da Loja (Centralizado na borda esquerda com sutil translucidez para ver a foto passando por baixo)
+                // Ribbon Vertical da Loja (Centralizado na borda esquerda com sutil translucidez)
                 HStack {
                     VStack {
                         Spacer()
@@ -74,7 +72,7 @@ struct OfertaCardView: View {
                         }
                         .padding(.horizontal, 7)
                         .padding(.vertical, 3.5)
-                        .background(oferta.temaSupermercado.fundo.opacity(0.90))
+                        .background(oferta.temaSupermercado.fundo.opacity(0.92))
                         .clipShape(
                             UnevenRoundedRectangle(
                                 topLeadingRadius: 0,
@@ -96,10 +94,10 @@ struct OfertaCardView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 145)
+            .frame(height: 175)
             
-            // 2. Informações da Oferta (Preço real + Nome do produto)
-            VStack(alignment: .leading, spacing: 6) {
+            // 2. Informações da Oferta (Preço e Descrição compactos e posicionados no fim da vitrine)
+            VStack(alignment: .leading, spacing: 3) {
                 // Preço de Oferta em Verde Vibrante + Unidade
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     Text(oferta.preco, format: .currency(code: "BRL"))
@@ -111,17 +109,17 @@ struct OfertaCardView: View {
                         .foregroundStyle(.secondary)
                 }
                 
-                // Nome do Produto (Altura padronizada para simetria na grade)
+                // Nome do Produto (Compacto, alinhado à base)
                 Text(oferta.produto)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(.primary)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
-                    .frame(height: 36, alignment: .topLeading)
+                    .frame(height: 32, alignment: .topLeading)
             }
             .padding(.horizontal, 10)
-            .padding(.top, 10)
-            .padding(.bottom, 6)
+            .padding(.top, 6)
+            .padding(.bottom, 2)
             
             Spacer(minLength: 0)
             
@@ -138,7 +136,7 @@ struct OfertaCardView: View {
                     }
                     .foregroundStyle(.white)
                     .padding(.horizontal, 10)
-                    .padding(.vertical, 3.5)
+                    .padding(.vertical, 3)
                     .background(Color.black.opacity(0.68))
                     .clipShape(
                         UnevenRoundedRectangle(
@@ -153,7 +151,7 @@ struct OfertaCardView: View {
                     Spacer()
                 }
             } else {
-                Color.clear.frame(height: 16)
+                Color.clear.frame(height: 14)
             }
         }
         .frame(maxWidth: .infinity)

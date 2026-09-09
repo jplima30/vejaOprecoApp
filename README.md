@@ -20,3 +20,12 @@ O aplicativo foi construído para conectar usuários às ofertas do banco de dad
 - **Tela de Detalhes do Produto:** Apresentação modal fluida (`.sheet`) ao tocar em qualquer item da vitrine, exibindo imagem expandida em alta escala, diagnóstico técnico de resolução da foto (Firebase), preço grande, validade e ficha técnica da oferta.
 - **Imersão Técnica:** Uso de `async/await` para consultas ultrarrápidas na internet, sem bloquear a interface gráfica.
 - **Experiência Conectada:** Integração direta com Firestore, utilizando `compactMap` e protocolos `Codable` para garantir que as informações estejam sempre seguras e formatadas corretamente.
+
+## 🎨 Padronização Visual da Vitrine
+
+A vitrine do **Veja o Preço** segue um padrão gráfico premium estrito para garantir máxima legibilidade e harmonia visual no app iOS:
+- **Resolução & Proporção:** Imagens quadradas de 400 × 400 px (proporção 1:1) com produto centralizado e respiro de 20 px em todas as bordas (área útil de 360 × 360 px);
+- **Fundo Branco Puro:** Periferia e 4 cantos em `#FFFFFF` estrito (RGB: 255, 255, 255), eliminando recortes escuros, artefatos de compressão e fundos coloridos de encartes/tabloides;
+- **Onda 1 (Saneamento de Fundos Pretos/Cinzas):** 34 produtos com fundos pretos opacos e sombras cinzas pesadas saneados com packshots de estúdio;
+- **Onda 2 (Saneamento de Fundos Coloridos de Encarte - Issue #14):** 42 produtos com fundos coloridos de tabloides (azul-petróleo Mateus, faixas verdes e gôndolas) 100% substituídos por packshots comerciais de estúdio em alta resolução com fundo branco puro.
+
